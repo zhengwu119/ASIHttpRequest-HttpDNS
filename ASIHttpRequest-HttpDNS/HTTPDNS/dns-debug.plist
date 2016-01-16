@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>mobile.gu360.com</key>
+	<array>
+		<string>101.251.217.226</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>dwopen.66zhang.com</key>
+	<array>
+		<string>101.251.217.251</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>www.gu360.com</key>
+	<array>
+		<string>101.251.206.77</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>openacc.66zhang.com</key>
+	<array>
+		<string>101.251.206.93</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>data.stockradar.net</key>
+	<array>
+		<string>101.251.206.78</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>quotes.66zhang.com</key>
+	<array>
+		<string>101.251.206.104</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>tips.66zhang.com</key>
+	<array>
+		<string>101.251.206.77</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>push.66zhang.com</key>
+	<array>
+		<string>101.251.206.76</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>aapi.66zhang.com</key>
+	<array>
+		<string>101.251.206.70</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+	<key>apiv2.66zhang.com</key>
+	<array>
+		<string>101.251.206.84</string>
+		<integer>10</integer>
+		<integer>0</integer>
+	</array>
+</dict>
+</plist>
