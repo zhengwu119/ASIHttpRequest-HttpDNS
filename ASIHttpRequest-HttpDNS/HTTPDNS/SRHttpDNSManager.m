@@ -84,7 +84,9 @@ static SRHttpDNSManager *dnsManager;
     NSArray *ipItem = [_dnsDataSource getArrayValueWithKey:domain];
     // 域名对应的IP信息不存在或者已过去，去DNSPOD同步数据
     if (ipItem == nil || ipItem.expiredTime < time(NULL)) {
-        ipItem = [self synchronizeRecordWithDomain:domain];
+        NSArray *item = [self synchronizeRecordWithDomain:domain];
+        // 如果同步失败，使用缓存中的
+        ipItem = item == nil ? ipItem : item;
     }
     ip = ipItem.ip;
     return ip;
