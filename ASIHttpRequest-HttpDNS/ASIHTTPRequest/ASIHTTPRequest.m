@@ -5195,7 +5195,7 @@ static NSOperationQueue *sharedQueue = nil;
 @synthesize PACFileRequest;
 @synthesize PACFileReadStream;
 @synthesize PACFileData;
-
+@synthesize port;
 @synthesize ip;
 @synthesize useHTTPDNS;
 
