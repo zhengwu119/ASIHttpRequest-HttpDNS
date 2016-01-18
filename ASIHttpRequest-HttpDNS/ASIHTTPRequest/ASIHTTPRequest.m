@@ -2080,6 +2080,11 @@ static NSOperationQueue *sharedQueue = nil;
     if (self.error.code == ASIRequestCancelledErrorType) {
         return;
     }
+    // 请求超时可能是IP过期导致的
+    if ([self error].code == ASIRequestTimedOutErrorType) {
+        [[SRHttpDNSManager sharedInstance] updateDomain:[self domain]];
+    }
+    
     [self saveErrorToLogFile];
 }
 /*!

@@ -23,5 +23,17 @@
  *  @return IP地址
  */
 - (NSString *)getIPWithDomain:(NSString *)domain;
+/*!
+ *  @brief 把域名信息置为过期
+ *
+ *  @param domain 过期的域名
+ */
+- (void)invalidateDomain:(NSString *)domain;
+/*!
+ *  @brief 更新域名信息
+ *
+ *  @param domain 需要更新的域名
+ */
+- (BOOL)updateDomain:(NSString *)domain;
 
 @end

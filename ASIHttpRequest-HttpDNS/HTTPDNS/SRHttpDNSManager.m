@@ -8,10 +8,10 @@
 
 #import "SRHttpDNSManager.h"
 #import "NSArray+DNS.h"
+#import "NSDictionary+Value.h"
 #import <libkern/OSAtomic.h>
 #import "Reachability.h"
 #import "ASIHTTPRequest.h"
-#import "NSDictionary+Value.h"
 
 static const NSString *dnsPodServerIP = @"119.29.29.29";
 
@@ -28,14 +28,6 @@ static SRHttpDNSManager *dnsManager;
 
 
 @implementation SRHttpDNSManager
-
-+ (instancetype)sharedInstance{
-    static dispatch_once_t token;
-    dispatch_once(&token, ^{
-        dnsManager = [[SRHttpDNSManager alloc] init];
-    });
-    return dnsManager;
-}
 
 - (instancetype)init{
     self = [super init];
@@ -76,22 +68,6 @@ static SRHttpDNSManager *dnsManager;
     return nil;
 }
 
-- (NSString *)getIPWithDomain:(NSString *)domain{
-    if (domain == nil) {
-        return nil;
-    }
-    NSString *ip = nil;
-    NSArray *ipItem = [_dnsDataSource getArrayValueWithKey:domain];
-    // 域名对应的IP信息不存在或者已过去，去DNSPOD同步数据
-    if (ipItem == nil || ipItem.expiredTime < time(NULL)) {
-        NSArray *item = [self synchronizeRecordWithDomain:domain];
-        // 如果同步失败，使用缓存中的
-        ipItem = item == nil ? ipItem : item;
-    }
-    ip = ipItem.ip;
-    return ip;
-}
-
 - (NSArray *)synchronizeRecordWithDomain:(NSString *)domain{
     NSString *urlStr = [NSString stringWithFormat:@"http://%@/d?dn=%@&ttl=1", dnsPodServerIP, domain];
     NSURL *url = [[NSURL alloc] initWithString:urlStr];
@@ -105,7 +81,7 @@ static SRHttpDNSManager *dnsManager;
         return nil;
     }
     NSArray *resultArray = [request.responseString componentsSeparatedByString:@","];
-
+    
     if (resultArray.count < 2) {
         return nil;
     }
@@ -135,12 +111,7 @@ static SRHttpDNSManager *dnsManager;
     NSArray *keySet = [_dnsDataSource allKeys];
     // 设置成过期
     for (NSString *key in keySet) {
-        NSArray *ipItem = [_dnsDataSource getArrayValueWithKey:key];
-        NSMutableArray *changedIpItem = [ipItem mutableCopy];
-        if (changedIpItem.count > 2) {
-            [changedIpItem replaceObjectAtIndex:2 withObject:@(0)];
-        }
-        [_dnsDataSource setObject:changedIpItem forKey:key];
+        [self invalidateDomain:key];
     }
 }
 
@@ -150,6 +121,46 @@ static SRHttpDNSManager *dnsManager;
     [_dnsDataSource writeToFile:_dnsConfigPath atomically:YES];
     OSSpinLockUnlock(&_lock);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - public
+
++ (instancetype)sharedInstance{
+    static dispatch_once_t token;
+    dispatch_once(&token, ^{
+        dnsManager = [[SRHttpDNSManager alloc] init];
+    });
+    return dnsManager;
+}
+
+// 获取域名对应的IP
+- (NSString *)getIPWithDomain:(NSString *)domain{
+    if (domain == nil) {
+        return nil;
+    }
+    NSString *ip = nil;
+    NSArray *ipItem = [_dnsDataSource getArrayValueWithKey:domain];
+    // 域名对应的IP信息不存在或者已过去，去DNSPOD同步数据
+    if (ipItem == nil || ipItem.expiredTime < time(NULL)) {
+        NSArray *item = [self synchronizeRecordWithDomain:domain];
+        // 如果同步失败，使用缓存中的
+        ipItem = item == nil ? ipItem : item;
+    }
+    ip = ipItem.ip;
+    return ip;
+}
+// 将域名置为过期
+- (void)invalidateDomain:(NSString *)domain{
+    NSArray *ipItem = [_dnsDataSource getArrayValueWithKey:domain];
+    NSMutableArray *changedIpItem = [ipItem mutableCopy];
+    if (changedIpItem.count > 2) {
+        [changedIpItem replaceObjectAtIndex:2 withObject:@(0)];
+    }
+    [_dnsDataSource setObject:changedIpItem forKey:domain];
+}
+
+- (BOOL)updateDomain:(NSString *)domain{
+    return [self synchronizeRecordWithDomain:domain] != nil;
 }
 
 @end

@@ -50,8 +50,8 @@
 		664D6E421C4A3CDB004B040F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		664D6E491C4A3D0A004B040F /* dns-debug.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "dns-debug.plist"; sourceTree = "<group>"; };
 		664D6E4A1C4A3D0A004B040F /* dns-release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "dns-release.plist"; sourceTree = "<group>"; };
-		664D6E4B1C4A3D0A004B040F /* NSArray+DNS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+DNS.h"; sourceTree = "<group>"; };
-		664D6E4C1C4A3D0A004B040F /* NSArray+DNS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+DNS.m"; sourceTree = "<group>"; };
+		664D6E4B1C4A3D0A004B040F /* NSArray+DNS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+DNS.h"; path = "../HTTPDNS/NSArray+DNS.h"; sourceTree = "<group>"; };
+		664D6E4C1C4A3D0A004B040F /* NSArray+DNS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+DNS.m"; path = "../HTTPDNS/NSArray+DNS.m"; sourceTree = "<group>"; };
 		664D6E4D1C4A3D0A004B040F /* SRHttpDNSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRHttpDNSManager.h; sourceTree = "<group>"; };
 		664D6E4E1C4A3D0A004B040F /* SRHttpDNSManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRHttpDNSManager.m; sourceTree = "<group>"; };
 		664D6E561C4A3D15004B040F /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
@@ -133,8 +133,6 @@
 			children = (
 				664D6E491C4A3D0A004B040F /* dns-debug.plist */,
 				664D6E4A1C4A3D0A004B040F /* dns-release.plist */,
-				664D6E4B1C4A3D0A004B040F /* NSArray+DNS.h */,
-				664D6E4C1C4A3D0A004B040F /* NSArray+DNS.m */,
 				664D6E4D1C4A3D0A004B040F /* SRHttpDNSManager.h */,
 				664D6E4E1C4A3D0A004B040F /* SRHttpDNSManager.m */,
 			);
@@ -173,6 +171,8 @@
 		664D6E821C4A40EF004B040F /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				664D6E4B1C4A3D0A004B040F /* NSArray+DNS.h */,
+				664D6E4C1C4A3D0A004B040F /* NSArray+DNS.m */,
 				664D6E831C4A40EF004B040F /* NSDictionary+Value.h */,
 				664D6E841C4A40EF004B040F /* NSDictionary+Value.m */,
 			);
@@ -445,6 +445,7 @@
 				664D6E471C4A3CDB004B040F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
