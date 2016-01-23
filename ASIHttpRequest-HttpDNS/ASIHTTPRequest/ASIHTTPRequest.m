@@ -651,12 +651,15 @@ static NSOperationQueue *sharedQueue = nil;
         NSString *urlStr = nil;
         if (![expression evaluateWithObject:domain] ) {
             ip = [[[SRHttpDNSManager sharedInstance] getIPWithDomain:domain] copy];
-            urlStr = [[newURL absoluteString] stringByReplacingOccurrencesOfString:domain withString:ip];
+            if (ip != nil) {
+                urlStr = [[newURL absoluteString] stringByReplacingOccurrencesOfString:domain withString:ip];
+                newURL = [NSURL URLWithString:urlStr];
+            }else{
+                ip = [domain copy];
+            }
         }else{
             ip = [domain copy];
-            urlStr = [newURL absoluteString];
         }
-        newURL = [NSURL URLWithString:urlStr];
     }
     if ([newURL isEqual:[self url]]) {
 		[[self cancelledLock] unlock];
@@ -2081,8 +2084,10 @@ static NSOperationQueue *sharedQueue = nil;
         return;
     }
     // 请求超时可能是IP过期导致的
-    if ([self error].code == ASIRequestTimedOutErrorType) {
-        [[SRHttpDNSManager sharedInstance] updateDomain:[self domain]];
+    if ([self error].code == ASIRequestTimedOutErrorType && (![self.domain isEqualToString:self.ip])) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[SRHttpDNSManager sharedInstance] updateDomain:[self domain]];
+        });
     }
     
     [self saveErrorToLogFile];
@@ -2117,7 +2122,7 @@ static NSOperationQueue *sharedQueue = nil;
                              @"tm" : [formatter stringFromDate:[NSDate date]],
                              @"nt" : networkType,
                              @"ev" : [self error] == nil ? @"": [[self error] description],
-                             @"sip" : [self ip],
+                             @"sip" : [self ip] == nil ? @"" : [self ip],
                              @"ci" : [self userInfo] == nil ? @"" : [self userInfo]};
     @synchronized(self) {
         FILE *file = fopen([errorLogPath cStringUsingEncoding:NSASCIIStringEncoding], "a+");
