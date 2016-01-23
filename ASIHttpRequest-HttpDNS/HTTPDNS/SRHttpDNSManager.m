@@ -69,6 +69,9 @@ static SRHttpDNSManager *dnsManager;
 }
 
 - (NSArray *)synchronizeRecordWithDomain:(NSString *)domain{
+    if (![_reachability isReachable]) {
+        return nil;
+    }
     NSString *urlStr = [NSString stringWithFormat:@"http://%@/d?dn=%@&ttl=1", dnsPodServerIP, domain];
     NSURL *url = [[NSURL alloc] initWithString:urlStr];
     if (url == nil) {
