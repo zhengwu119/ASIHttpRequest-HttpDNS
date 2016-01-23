@@ -47,7 +47,7 @@ static SRHttpDNSManager *dnsManager;
 #else
     NSString *fileName = @"dns-release";
 #endif
-    _dnsConfigPath = [NSString stringWithFormat:@"%@/%@.plist", [self dnsConfigDocuPath], fileName];
+    _dnsConfigPath = [NSString stringWithFormat:@"%@/%@", [self dnsConfigDocuPath], fileName];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:_dnsConfigPath]) {
         NSString *src = [[NSBundle mainBundle] pathForResource:fileName ofType:@"plist"];
@@ -78,7 +78,7 @@ static SRHttpDNSManager *dnsManager;
         return nil;
     }
     ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
-    [request setTimeOutSeconds:5];
+    [request setTimeOutSeconds:2];
     [request startSynchronous];
     if (request.responseStatusCode != 200) {
         return nil;
