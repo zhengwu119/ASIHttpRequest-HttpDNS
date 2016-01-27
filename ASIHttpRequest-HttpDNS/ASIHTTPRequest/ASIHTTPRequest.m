@@ -3942,7 +3942,7 @@ static NSOperationQueue *sharedQueue = nil;
     
     // Create an ASIHTTPRequest to fetch the PAC file
     ASIHTTPRequest *PACRequest = [ASIHTTPRequest requestWithURL:[self PACurl]];
-    
+    PACRequest.useHTTPDNS = NO;
     // Will prevent this request attempting to configure proxy settings for itself
     [PACRequest setIsPACFileRequest:YES];
     

@@ -13,7 +13,7 @@
 #import "Reachability.h"
 #import "ASIHTTPRequest.h"
 
-static const NSString *dnsPodServerIP = @"119.29.29.29";
+static NSString *dnsPodServerIP = @"119.29.29.29";
 
 static SRHttpDNSManager *dnsManager;
 
@@ -34,7 +34,7 @@ static SRHttpDNSManager *dnsManager;
     if (self) {
         _lock = OS_SPINLOCK_INIT;
         [self initDataSource];
-        
+        _reachability = [Reachability reachabilityWithHostName:dnsPodServerIP];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkChanged:) name:kReachabilityChangedNotification object:nil];
     }
     return self;
@@ -79,6 +79,7 @@ static SRHttpDNSManager *dnsManager;
     }
     ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
     [request setTimeOutSeconds:2];
+    request.useHTTPDNS = NO;
     [request startSynchronous];
     if (request.responseStatusCode != 200) {
         return nil;
